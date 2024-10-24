@@ -1,0 +1,43 @@
+<div class="file-upload-wrapper"
+     [class.success]="uploadSuccess"
+     [class.error]="uploadError"
+     (drop)="onFileDrop($event)"
+     (dragover)="onDragOver($event)">
+  <input
+    type="file"
+    accept="video/mp4"
+    (change)="onFileChange($event)"
+    #fileInput
+  />
+  <video
+    #videoElement
+    (loadedmetadata)="onMetadataLoaded(videoElement)"
+    style="display: none;"
+  ></video>
+  <div class="file-dropper" (click)="fileInput.click()">
+    <div *ngIf="videoName()">
+      <div *ngIf="selectedFile">
+        <p>
+          <span class="image-name">{{ videoName() }}</span> ({{ fileSize() }} MB)
+        </p>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="validationError" class="font-bold mt-4 text-red-500">
+    {{ validationError }}
+  </div>
+  <div *ngIf="uploadSuccess" class="font-bold mt-4 text-green-500">
+    Video uploaded successfully!
+  </div>
+  <div *ngIf="uploadError" class="font-bold mt-4 text-red-500">
+    Error uploading video.
+  </div>
+  <div *ngIf="uploadVideosStatus" class="flex flex-col mt-12">
+    <div *ngFor="let status of uploadVideosStatus" class="flex flex-row space-x-12 font-bold text-lg">
+      <p>{{ status.name }}</p>
+      <p [ngClass]="status.status ? 'text-green-500' : 'text-red-500'">
+        {{ status.status ? 'Success' : 'Error' }}
+      </p>
+    </div>
+  </div>
+</div>

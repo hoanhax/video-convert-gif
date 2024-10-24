@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  frontend:
+    image: 127.0.0.1:5000/frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    deploy:
+      replicas: 1
+    ports:
+      - "80:80"
+    networks:
+      - app-network
+
+  backend:
+    image: 127.0.0.1:5000/backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    deploy:
+      replicas: 5
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:alpine
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: overlay
+    attachable: true

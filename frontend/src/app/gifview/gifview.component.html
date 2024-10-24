@@ -1,0 +1,4 @@
+<!-- GIF view component -->
+<div class="flex flex-wrap space-x-4">
+  <img *ngFor="let gif of gifs" [src]="getGifUrl(gif)" alt="GIF" class="w-1/4" />
+</div>

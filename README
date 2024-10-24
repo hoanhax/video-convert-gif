@@ -1,0 +1,103 @@
+# Project Name
+
+## Overview
+
+This project is designed to be run using Docker and Docker Swarm for both development and deployment environments. This guide will walk you through setting up and running the project.
+
+## Prerequisites
+
+- [Docker](https://docs.docker.com/get-docker/) (version 20.10 or later)
+- [Docker Compose](https://docs.docker.com/compose/install/) (version 1.29 or later)
+- [Docker Swarm](https://docs.docker.com/engine/swarm/) initialized on your machine or cluster
+
+## Development Setup
+
+### Step 1: Clone the Repository
+
+```
+git clone https://github.com/hoanhax/video-convert-gif
+cd video-convert-gif
+```
+
+### Step 2: Build and Run with Docker Compose
+
+1. Ensure your Docker daemon is running.
+2. Use Docker Compose to build and run the services:
+
+```bash
+docker-compose -f docker-compose.dev.yml up --build
+```
+
+- This command will build the Docker images and start the containers as defined in the `docker-compose.dev.yml` file.
+- Access the application at `http://localhost:4200`.
+
+### Step 4: View logs of services
+
+```bash
+docker-compose -f docker-compose.dev.yml logs -f <service_name>
+```
+
+- Replace `<service_name>` with the name of the service you want to view logs for.
+
+### Step 4: Stop the Development Environment
+
+To stop the running containers, use:
+
+```bash
+docker-compose -f docker-compose.dev.yml down
+```
+
+## Deployment Setup with Docker Swarm
+
+### Step 1: Initialize Docker Swarm
+
+If you haven't already initialized Docker Swarm, do so with:
+
+```bash
+docker swarm init
+```
+
+### Step 2: Deploy the Stack
+
+1. Ensure your Docker Swarm is running.
+2. Set up a Docker registry
+```bash
+docker service create --name registry --publish published=5000,target=5000 registry:2
+```
+
+3. Deploy the stack
+```bash
+docker stack deploy -c docker-compose.yml your_stack_name
+```
+
+- Replace `your_stack_name` with a name for your stack.
+- This command will deploy the services as a stack in Docker Swarm.
+- Access the application at `http://localhost:80`.
+
+### Step 3: Verify the Deployment
+
+Check the status of your services with:
+
+```bash
+docker service ls
+```
+
+- This will list all services running in your Docker Swarm stack.
+
+### Step 4: Remove the Stack
+
+To remove the stack and stop all services, use:
+
+```bash
+docker stack rm your_stack_name
+```
+
+## Troubleshooting
+
+- If you encounter issues, check the logs of your services with:
+
+```bash
+docker service logs your_stack_name_service_name
+```
+
+- Ensure your Docker daemon is running and you have the necessary permissions to execute Docker commands.
